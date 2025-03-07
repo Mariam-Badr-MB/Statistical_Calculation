@@ -6,8 +6,12 @@
     * Author4: John Ayman Demian, ID: 20230109
     * Author5: George Malak Magdy, ID: 20231042
 
- * Description: This is a program that manages "Iftar Invitations" which makes you add a guest,
-             display it and edit the date of invitation.
+ * Description: 
+    This program implements a generic Statistical Calculation class using templates.
+    The class provides various statistical operations on a dynamically allocated array of data,
+    including sorting, finding the median, minimum, maximum, mean, and summation.
+    It also includes utility functions for displaying the sorted data, taking user input dynamically,
+    and providing a menu for statistical operations.
 
  * Version: V1.0
 */
