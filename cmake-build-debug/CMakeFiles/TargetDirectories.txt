@@ -1,0 +1,3 @@
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/statistical calculation/Statistical_Calculation/cmake-build-debug/CMakeFiles/Statistical_Calculation.dir
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/statistical calculation/Statistical_Calculation/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/statistical calculation/Statistical_Calculation/cmake-build-debug/CMakeFiles/rebuild_cache.dir
