@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/statistical calculation/Statistical_Calculation/cmake-build-debug",
-		"source" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/statistical calculation/Statistical_Calculation"
+		"build" : "C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Statistical_Calculation/cmake-build-debug",
+		"source" : "C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Statistical_Calculation"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 6
+		"minor" : 7
 	}
 }

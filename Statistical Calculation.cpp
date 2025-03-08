@@ -18,7 +18,6 @@
 // ********************************************************************************************************
 
 #include <bits/stdc++.h>
-
 using namespace std;
 
 // **************************  Statistical Calculation Class **************************
@@ -35,67 +34,90 @@ public:
 
     // Statistical Calculation Functions
     T findMedian();
-
     T findMin();
-
     T findMax();
-
     double findMean();
-
     T findSummation();
 
     // Utility Functions
-    void displayArray();            // Display sorted array
+    void displayArray();            // Display the sorted array
     void inputData();               // Take input dynamically
     void statisticsMenu();          // Menu for statistical operations
 };
 
 // ************************** Implement Sort Algorithm  **************************
+
 template<typename T>
 void StatisticalCalculation<T>::sort() {
-
-
+// Using Bubble Sort Algorithm
+    for (int i = 0; i < this->size - 1; ++i) {
+        for (int j = 0; j < this->size - i - 1; ++j) {
+            if (data[j] > data[j + 1]) {
+                T temp = data[j];
+                data[j] = data[j + 1];
+                data[j + 1] = temp;
+            }
+        }
+    }
 }
 
 // ************************** Implement Find Median  **************************
+
 template<typename T>
 T StatisticalCalculation<T>::findMedian() {
+    sort();         // Sort the array first to find the median easily.
+    displayArray();
+    // If the size of the array is even, return the average of the two middle elements.
+    if (this->size % 2 == 0) {
+        int middleIndex1 = this->size /2;
+        int middleIndex2 = (this->size /2) - 1;
+        return (data[middleIndex1] + data[middleIndex2]) /2;
+    }
 
+    // If the size of the array is odd, return the middle element.
+    return data[this->size / 2];
 }
 
 // ************************** Implement Find Min  **************************
+
 template<typename T>
 T StatisticalCalculation<T>::findMin() {
 
 }
 
 // ************************** Implement Find Max  **************************
+
 template<typename T>
 T StatisticalCalculation<T>::findMax() {
 
 }
 
 // ************************** Implement Find Mean  **************************
+
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
 
 }
 
 // ************************** Implement Find Summation  **************************
+
 template<typename T>
 T StatisticalCalculation<T>::findSummation() {
 
 }
 
 // ************************** Implement Display sorted array **************************
+
 template<typename T>
 void StatisticalCalculation<T>::displayArray() {
     for (int i = 0; i < this->size; ++i) {
         cout << data[i] << " ";
     }
+    cout << endl;
 }
 
 // ************************** Implement Input Data **************************
+
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
     long long numOfElements;
@@ -133,13 +155,14 @@ void StatisticalCalculation<T>::inputData() {
         }
     }
 
-    // Delete the old data and assign a new data.
+    // Delete the old data and assign new data.
     delete[] this->data;
     this->data = newData;
     cin.ignore();
 }
 
 // ************************** Implement Statistics Menu **************************
+
 template<typename T>
 void StatisticalCalculation<T>::statisticsMenu() {
     string choice;
@@ -154,7 +177,7 @@ void StatisticalCalculation<T>::statisticsMenu() {
         getline(cin, choice);
     }
 
-    if (choice == "1") findMedian();
+    if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
     else if (choice == "2") findMin();
     else if (choice == "3") findMax();
     else if (choice == "4") findMean();
@@ -162,6 +185,7 @@ void StatisticalCalculation<T>::statisticsMenu() {
 }
 
 // ************************** Main Function **************************
+
 int main() {
     StatisticalCalculation<double> statistics;
     statistics.inputData();
