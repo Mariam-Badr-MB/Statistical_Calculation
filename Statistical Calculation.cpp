@@ -98,32 +98,30 @@ void StatisticalCalculation<T>::displayArray() {
 // ************************** Implement Input Data **************************
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
-    string numOfElements;
-    bool notNum;
-    T value;
+    long long numOfElements;
 
     while (true) {
-        notNum = false;
-        cout << "Enter the number of elements:";
-        getline(cin, numOfElements);
-        for (int i = 0; i < numOfElements.size(); ++i) {
-            if (numOfElements[i] < '0'|| numOfElements[i]>'9') {
-                notNum = true;
-                break;
-            }
+        try {
+            cout << "Enter the number of elements:";
+            cin >> numOfElements;
+            if (cin.fail() || numOfElements <= 0) throw runtime_error("Invalid Input!");
+            break;
         }
-        if (notNum || stoll(numOfElements) == 0) cout << "Invalid Input!\n";
-        else break;
+        catch (const runtime_error &e) {
+            cout << e.what() << endl;
+            cin.clear();
+            cin.ignore();
+        }
     }
 
-    this->size = stoll(numOfElements);
+    this->size = numOfElements;
     auto *newData = new T[this->size];
 
-    for (int i = 1; i <= this->size; ++i) {
+    for (int i = 1; i <= numOfElements; ++i) {
         while (true) {
             try {
                 cout << "Enter element " << i << ":";
-                cin>>value;
+                cin >> newData[i - 1];
                 if (cin.fail()) throw runtime_error("Invalid Input!");
                 break;
             }
@@ -133,7 +131,6 @@ void StatisticalCalculation<T>::inputData() {
                 cin.ignore();
             }
         }
-        newData[i - 1] = value;
     }
 
     // Delete the old data and assign a new data.
@@ -166,7 +163,7 @@ void StatisticalCalculation<T>::statisticsMenu() {
 
 // ************************** Main Function **************************
 int main() {
-    StatisticalCalculation<string> statistics;
+    StatisticalCalculation<double> statistics;
     statistics.inputData();
     statistics.statisticsMenu();
     return 0;
