@@ -98,31 +98,32 @@ void StatisticalCalculation<T>::displayArray() {
 // ************************** Implement Input Data **************************
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
-    long long numOfElements;
+    string numOfElements;
+    bool notNum;
     T value;
 
     while (true) {
-        try {
-            cout << "Enter the number of elements:";
-            cin >> numOfElements;
-            if (cin.fail() || numOfElements <= 0) throw runtime_error("Invalid Input!");
-            break;
+        notNum = false;
+        cout << "Enter the number of elements:";
+        getline(cin, numOfElements);
+        for (int i = 0; i < numOfElements.size(); ++i) {
+            if (numOfElements[i] < '0'|| numOfElements[i]>'9') {
+                notNum = true;
+                break;
+            }
         }
-        catch (const runtime_error &e) {
-            cout << e.what() << endl;
-            cin.clear();
-            cin.ignore();
-        }
+        if (notNum || stoll(numOfElements) == 0) cout << "Invalid Input!\n";
+        else break;
     }
 
-    this->size = numOfElements;
+    this->size = stoll(numOfElements);
     auto *newData = new T[this->size];
 
-    for (int i = 1; i <= numOfElements; ++i) {
+    for (int i = 1; i <= this->size; ++i) {
         while (true) {
             try {
                 cout << "Enter element " << i << ":";
-                cin >> value;
+                cin>>value;
                 if (cin.fail()) throw runtime_error("Invalid Input!");
                 break;
             }
@@ -132,43 +133,40 @@ void StatisticalCalculation<T>::inputData() {
                 cin.ignore();
             }
         }
-        newData[i - 1] = this->data[i - 1];
+        newData[i - 1] = value;
     }
 
     // Delete the old data and assign a new data.
     delete[] this->data;
     this->data = newData;
+    cin.ignore();
 }
 
 // ************************** Implement Statistics Menu **************************
 template<typename T>
 void StatisticalCalculation<T>::statisticsMenu() {
-    int choice;
-    while (true) {
-        try {
-            cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
-                    "4. Find Mean\n5. Find Summation\nEnter your choice (1-5):";
-            cin >> choice;
-            if (cin.fail() || choice <= 0 || choice > 5) throw runtime_error("Invalid Input!");
-            break;
-        }
-        catch (const runtime_error &e) {
-            cout << e.what() << endl;
-            cin.clear();
-            cin.ignore();
-        }
+    string choice;
+
+    cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
+            "4. Find Mean\n5. Find Summation\nEnter your choice (1-5):";
+    getline(cin, choice);
+    while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5") {
+        cout << "Invalid Input!\n";
+        cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
+                "4. Find Mean\n5. Find Summation\nEnter your choice (1-5):";
+        getline(cin, choice);
     }
 
-    if (choice == 1) findMedian();
-    else if (choice == 2) findMin();
-    else if (choice == 3) findMax();
-    else if (choice == 4) findMean();
-    else if (choice == 5) findSummation();
+    if (choice == "1") findMedian();
+    else if (choice == "2") findMin();
+    else if (choice == "3") findMax();
+    else if (choice == "4") findMean();
+    else if (choice == "5") findSummation();
 }
 
 // ************************** Main Function **************************
 int main() {
-    StatisticalCalculation<int> statistics;
+    StatisticalCalculation<string> statistics;
     statistics.inputData();
     statistics.statisticsMenu();
     return 0;
