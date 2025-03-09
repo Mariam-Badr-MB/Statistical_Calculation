@@ -82,27 +82,23 @@ T StatisticalCalculation<T>::findMedian() {
 
 template<typename T>
 T StatisticalCalculation<T>::findMin() {
-
+    sort();
+    return this->data[0];
 }
 
 // ************************** Implement Find Max  **************************
 
 template<typename T>
 T StatisticalCalculation<T>::findMax() {
-
+    sort();
+    return this->data[this->size - 1];
 }
 
 // ************************** Implement Find Mean  **************************
 
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
-    double mean = 0 ;
-
-    for (int i = 0; i < this->size ; ++i) {
-           mean += this->data[i];
-    }
-
-    mean  /= this->size ;
+    double mean = findSummation() /this->size ;
     return  mean;
 }
 
@@ -110,7 +106,7 @@ double StatisticalCalculation<T>::findMean() {
 
 template<typename T>
 T StatisticalCalculation<T>::findSummation() {
-    long long sum = 0 ;
+    T sum = 0;
     for (int i = 0; i < this->size ; ++i) {
         sum += this->data[i];
     }
@@ -190,10 +186,10 @@ void StatisticalCalculation<T>::statisticsMenu() {
     }
 
     if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
-    else if (choice == "2") findMin();
-    else if (choice == "3") findMax();
-    else if (choice == "4") cout << findMean() << endl;
-    else if (choice == "5") cout << findSummation() << endl;
+    else if (choice == "2") cout << "Min: " << findMin() << endl << endl;
+    else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
+    else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
+    else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
 }
 
 // ************************** Main Function **************************
