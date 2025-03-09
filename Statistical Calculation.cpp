@@ -5,8 +5,10 @@
     * Author3: Mariam Badr Yehia                     ID: 20230391
     * Author4: John Ayman Demian                     ID: 20230109
     * Author5: George Malak Magdy                    ID: 20231042
-* Date : 9 / 3 / 2025
-* Prof : Dr. Besheer
+
+* Date: 9 / 3 / 2025
+* Prof: Dr. Besheer
+
 * Description:
     This program implements a generic Statistical Calculation class using templates.
     The class provides various statistical operations on a dynamically allocated array of data,
@@ -14,7 +16,7 @@
     It also includes utility functions for displaying the sorted data, taking user input dynamically,
     and providing a menu for statistical operations.
 
-* Version: V1.0
+* Version: V5.0
 */
 // ********************************************************************************************************
 
@@ -47,56 +49,67 @@ public:
 };
 
 // ************************** Implement Sort Algorithm  **************************
+
 template <class T>
-void merge(T data[] ,int l ,int m ,int r) {
+void merge(T data[] ,int left ,int mid ,int right) {
     int i , j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
+    int n1 = mid - left + 1;    // Size of the left subarray.
+    int n2 = right - mid;       // Size of the right subarray.
+
+    // Create temp arrays L[] and R[] to store the data.
     T L[n1], R[n2];
     for (i = 0; i < n1; i++) {
-        L[i] = data [l + i];
+        L[i] = data [left + i];
     }
     for (j = 0; j < n2; j++) {
-        R[j] = data [m + j + 1];
+        R[j] = data [mid + j + 1];
     }
+
+    // Merge the temp arrays back into data[left...right].
     i = j = 0;
-    k = l;
+    k = left;
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
             data [k] = L[i];
             i++;
-        }else {
+        }
+        else {
             data [k] = R[j];
             j++;
         }
         k++;
     }
+
+    // Copy the remaining elements of L[], if there are any.
     while (i < n1) {
         data [k] = L[i];
         i++;
         k++;
     }
+
+    // Copy the remaining elements of R[], if there are any.
     while (j < n2) {
         data [k] = R[j];
         j++;
         k++;
     }
-
 }
 
 template <class T>
-void mergeSort(T data[] , int l , int r) {
-    if (l < r) {
-        int mid = l + (r - l) / 2;
-        mergeSort(data, l, mid);
-        mergeSort(data, mid+1, r);
-        merge(data, l, mid, r);
+void mergeSort(T data[] , int left , int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(data, left, mid);
+        mergeSort(data, mid + 1, right);
+        merge(data, left, mid, right);
     }
 }
+
 // ************************** Implement Sort Function  **************************
+
 template<typename T>
 void StatisticalCalculation<T>::sort() {
-    // Using merge Sort Algorithm
+    // Using Merge Sort Algorithm to sort the array.
     mergeSort(data, 0, size-1);
 }
 
@@ -104,7 +117,7 @@ void StatisticalCalculation<T>::sort() {
 
 template<typename T>
 T StatisticalCalculation<T>::findMedian() {
-    sort();         // Sort the array first to find the median easily.
+    sort();
 
     // If the size of the array is even, return the average of the two middle elements.
     if (this->size % 2 == 0) {
@@ -138,7 +151,6 @@ T StatisticalCalculation<T>::findMax() {
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
     return (findSummation() / (double)this->size) ;
-
 }
 
 // ************************** Implement Find Summation  **************************
@@ -149,7 +161,6 @@ T StatisticalCalculation<T>::findSummation() {
     for (int i = 0; i < this->size ; ++i) {
         sum += this->data[i];
     }
-
     return  sum;
 }
 
@@ -213,11 +224,14 @@ void StatisticalCalculation<T>::inputData() {
 
 template<typename T>
 void StatisticalCalculation<T>::statisticsMenu() {
-    string choice;
+    cout << "Sorted Data: ";
+    displayArray();
 
-    cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
-            "4. Find Mean\n5. Find Summation\nEnter your choice (1-5):";
+    string choice;
+    cout << "\nSelect a statistical calculation:\n1. Find Median.\n2. Find Minimum.\n3. Find Maximum.\n"
+            "4. Find Mean.\n5. Find Summation.\nEnter your choice (1-5):";
     getline(cin, choice);
+
     while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5") {
         cout << "Invalid Input!\n";
         cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
@@ -230,8 +244,6 @@ void StatisticalCalculation<T>::statisticsMenu() {
     else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
     else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
     else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
-    cout << "Array Elements:" << endl ;
-    displayArray();
 }
 
 // ************************** Main Function **************************
@@ -242,4 +254,3 @@ int main() {
     statistics.statisticsMenu();
     return 0;
 }
-
