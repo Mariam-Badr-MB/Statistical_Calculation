@@ -5,7 +5,8 @@
     * Author3: Mariam Badr Yehia                     ID: 20230391
     * Author4: John Ayman Demian                     ID: 20230109
     * Author5: George Malak Magdy                    ID: 20231042
-
+* Date : 9 / 3 / 2025
+* Prof : Dr. Besheer
 * Description:
     This program implements a generic Statistical Calculation class using templates.
     The class provides various statistical operations on a dynamically allocated array of data,
@@ -136,8 +137,8 @@ T StatisticalCalculation<T>::findMax() {
 
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
-    double mean = findSummation() /this->size ;
-    return  mean;
+    return (findSummation() / (double)this->size) ;
+
 }
 
 // ************************** Implement Find Summation  **************************
@@ -156,6 +157,7 @@ T StatisticalCalculation<T>::findSummation() {
 
 template<typename T>
 void StatisticalCalculation<T>::displayArray() {
+    sort();
     for (int i = 0; i < this->size; ++i) {
         cout << data[i] << " ";
     }
@@ -228,6 +230,8 @@ void StatisticalCalculation<T>::statisticsMenu() {
     else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
     else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
     else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
+    cout << "Array Elements:" << endl ;
+    displayArray();
 }
 
 // ************************** Main Function **************************
