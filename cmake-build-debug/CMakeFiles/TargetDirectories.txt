@@ -1,3 +1,0 @@
-C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Statistical_Calculation/cmake-build-debug/CMakeFiles/Statistical_Calculation.dir
-C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Statistical_Calculation/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Statistical_Calculation/cmake-build-debug/CMakeFiles/rebuild_cache.dir

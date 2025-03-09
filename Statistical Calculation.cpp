@@ -96,14 +96,26 @@ T StatisticalCalculation<T>::findMax() {
 
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
+    double mean = 0 ;
 
+    for (int i = 0; i < this->size ; ++i) {
+           mean += this->data[i];
+    }
+
+    mean  /= this->size ;
+    return  mean;
 }
 
 // ************************** Implement Find Summation  **************************
 
 template<typename T>
 T StatisticalCalculation<T>::findSummation() {
+    long long sum = 0 ;
+    for (int i = 0; i < this->size ; ++i) {
+        sum += this->data[i];
+    }
 
+    return  sum;
 }
 
 // ************************** Implement Display sorted array **************************
@@ -180,8 +192,8 @@ void StatisticalCalculation<T>::statisticsMenu() {
     if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
     else if (choice == "2") findMin();
     else if (choice == "3") findMax();
-    else if (choice == "4") findMean();
-    else if (choice == "5") findSummation();
+    else if (choice == "4") cout << findMean() << endl;
+    else if (choice == "5") cout << findSummation() << endl;
 }
 
 // ************************** Main Function **************************
