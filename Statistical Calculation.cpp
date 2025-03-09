@@ -66,7 +66,7 @@ void StatisticalCalculation<T>::sort() {
 template<typename T>
 T StatisticalCalculation<T>::findMedian() {
     sort();         // Sort the array first to find the median easily.
-    displayArray();
+
     // If the size of the array is even, return the average of the two middle elements.
     if (this->size % 2 == 0) {
         int middleIndex1 = this->size /2;
