@@ -21,6 +21,7 @@
 // ********************************************************************************************************
 
 #include <bits/stdc++.h>
+
 using namespace std;
 
 // **************************  Statistical Calculation Class **************************
@@ -37,9 +38,13 @@ public:
 
     // Statistical Calculation Functions
     T findMedian();
+
     T findMin();
+
     T findMax();
+
     double findMean();
+
     T findSummation();
 
     // Utility Functions
@@ -50,19 +55,19 @@ public:
 
 // ************************** Implement Sort Algorithm  **************************
 
-template <class T>
-void merge(T data[] ,int left ,int mid ,int right) {
-    int i , j, k;
+template<class T>
+void merge(T data[], int left, int mid, int right) {
+    int i, j, k;
     int n1 = mid - left + 1;    // Size of the left subarray.
     int n2 = right - mid;       // Size of the right subarray.
 
     // Create temp arrays L[] and R[] to store the data.
     T L[n1], R[n2];
     for (i = 0; i < n1; i++) {
-        L[i] = data [left + i];
+        L[i] = data[left + i];
     }
     for (j = 0; j < n2; j++) {
-        R[j] = data [mid + j + 1];
+        R[j] = data[mid + j + 1];
     }
 
     // Merge the temp arrays back into data[left...right].
@@ -70,11 +75,10 @@ void merge(T data[] ,int left ,int mid ,int right) {
     k = left;
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
-            data [k] = L[i];
+            data[k] = L[i];
             i++;
-        }
-        else {
-            data [k] = R[j];
+        } else {
+            data[k] = R[j];
             j++;
         }
         k++;
@@ -82,21 +86,21 @@ void merge(T data[] ,int left ,int mid ,int right) {
 
     // Copy the remaining elements of L[], if there are any.
     while (i < n1) {
-        data [k] = L[i];
+        data[k] = L[i];
         i++;
         k++;
     }
 
     // Copy the remaining elements of R[], if there are any.
     while (j < n2) {
-        data [k] = R[j];
+        data[k] = R[j];
         j++;
         k++;
     }
 }
 
-template <class T>
-void mergeSort(T data[] , int left , int right) {
+template<class T>
+void mergeSort(T data[], int left, int right) {
     if (left < right) {
         int mid = left + (right - left) / 2;
         mergeSort(data, left, mid);
@@ -110,7 +114,7 @@ void mergeSort(T data[] , int left , int right) {
 template<typename T>
 void StatisticalCalculation<T>::sort() {
     // Using Merge Sort Algorithm to sort the array.
-    mergeSort(data, 0, size-1);
+    mergeSort(data, 0, size - 1);
 }
 
 // ************************** Implement Find Median  **************************
@@ -121,9 +125,9 @@ T StatisticalCalculation<T>::findMedian() {
 
     // If the size of the array is even, return the average of the two middle elements.
     if (this->size % 2 == 0) {
-        int middleIndex1 = this->size /2;
-        int middleIndex2 = (this->size /2) - 1;
-        return (data[middleIndex1] + data[middleIndex2]) /2;
+        int middleIndex1 = this->size / 2;
+        int middleIndex2 = (this->size / 2) - 1;
+        return (data[middleIndex1] + data[middleIndex2]) / 2;
     }
 
     // If the size of the array is odd, return the middle element.
@@ -150,7 +154,7 @@ T StatisticalCalculation<T>::findMax() {
 
 template<typename T>
 double StatisticalCalculation<T>::findMean() {
-    return (findSummation() / (double)this->size) ;
+    return (findSummation() / (double) this->size);
 }
 
 // ************************** Implement Find Summation  **************************
@@ -158,10 +162,10 @@ double StatisticalCalculation<T>::findMean() {
 template<typename T>
 T StatisticalCalculation<T>::findSummation() {
     T sum = 0;
-    for (int i = 0; i < this->size ; ++i) {
+    for (int i = 0; i < this->size; ++i) {
         sum += this->data[i];
     }
-    return  sum;
+    return sum;
 }
 
 // ************************** Implement Display sorted array **************************
@@ -179,26 +183,33 @@ void StatisticalCalculation<T>::displayArray() {
 
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
-    long long numOfElements;
+    string numOfElements;
+    bool notInteger;
 
     while (true) {
-        try {
-            cout << "Enter the number of elements:";
-            cin >> numOfElements;
-            if (cin.fail() || numOfElements <= 0) throw runtime_error("Invalid Input!");
-            break;
+        notInteger = false;
+        cout << "Enter the number of elements:";
+        getline(cin, numOfElements);
+        if (numOfElements.empty()) {
+            notInteger = true;
+        } else {
+            for (int i = 0; i < numOfElements.size(); ++i) {
+                if (numOfElements[i] < '0' || numOfElements[i] > '9' || numOfElements == " ") {
+                    notInteger = true;
+                    break;
+                }
+            }
         }
-        catch (const runtime_error &e) {
-            cout << e.what() << endl;
-            cin.clear();
-            cin.ignore();
+        if (!notInteger) {
+            if (stoll(numOfElements) > 0) break;
         }
+        cout << "Invalid Input!\n";
     }
 
-    this->size = numOfElements;
+    this->size = stoll(numOfElements);
     auto *newData = new T[this->size];
 
-    for (int i = 1; i <= numOfElements; ++i) {
+    for (int i = 1; i <= this->size; ++i) {
         while (true) {
             try {
                 cout << "Enter element " << i << ":";
