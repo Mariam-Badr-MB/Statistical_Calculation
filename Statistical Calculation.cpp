@@ -21,10 +21,10 @@
 // ********************************************************************************************************
 
 #include <bits/stdc++.h>
-
 using namespace std;
 
 // **************************  Statistical Calculation Class **************************
+
 template<typename T>
 class StatisticalCalculation {
 private:
@@ -32,19 +32,15 @@ private:
     int size;                              // Number of elements in the array
 public:
     StatisticalCalculation() = default;
-//    ~StatisticalCalculation();
+    ~StatisticalCalculation();
 
     void sort();
 
     // Statistical Calculation Functions
     T findMedian();
-
     T findMin();
-
     T findMax();
-
     double findMean();
-
     T findSummation();
 
     // Utility Functions
@@ -52,6 +48,13 @@ public:
     void inputData();               // Take input dynamically
     void statisticsMenu();          // Menu for statistical operations
 };
+
+// ************************** Destructor **************************
+
+template<typename T>
+StatisticalCalculation<T>::~StatisticalCalculation() {
+    delete[] data;
+}
 
 // ************************** Implement Sort Algorithm  **************************
 
