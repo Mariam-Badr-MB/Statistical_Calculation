@@ -21,10 +21,10 @@
 // ********************************************************************************************************
 
 #include <bits/stdc++.h>
+
 using namespace std;
 
 // **************************  Statistical Calculation Class **************************
-
 template<typename T>
 class StatisticalCalculation {
 private:
@@ -38,9 +38,13 @@ public:
 
     // Statistical Calculation Functions
     T findMedian();
+
     T findMin();
+
     T findMax();
+
     double findMean();
+
     T findSummation();
 
     // Utility Functions
@@ -48,13 +52,6 @@ public:
     void inputData();               // Take input dynamically
     void statisticsMenu();          // Menu for statistical operations
 };
-
-// ************************** Destructor **************************
-
-template<typename T>
-StatisticalCalculation<T>::~StatisticalCalculation() {
-    delete[] data;
-}
 
 // ************************** Implement Sort Algorithm  **************************
 
@@ -181,6 +178,11 @@ void StatisticalCalculation<T>::displayArray() {
     }
     cout << endl;
 }
+template<typename T>
+StatisticalCalculation<T>::~StatisticalCalculation() {
+    delete[] data;
+}
+
 
 // ************************** Implement Input Data **************************
 
@@ -190,8 +192,8 @@ void StatisticalCalculation<T>::inputData() {
     bool notInteger;
 
     while (true) {
-        notInteger = false;
-        cout << "Enter the number of elements:";
+        notInteger = false; cin.ignore();
+        cout << "Please, enter the number of elements:";
         getline(cin, numOfElements);
         if (numOfElements.empty()) {
             notInteger = true;
@@ -215,7 +217,7 @@ void StatisticalCalculation<T>::inputData() {
     for (int i = 1; i <= this->size; ++i) {
         while (true) {
             try {
-                cout << "Enter element " << i << ":";
+                cout << "Please, enter element " << i << ":";
                 cin >> newData[i - 1];
                 if (cin.fail()) throw runtime_error("Invalid Input!");
                 break;
@@ -238,18 +240,17 @@ void StatisticalCalculation<T>::inputData() {
 
 template<typename T>
 void StatisticalCalculation<T>::statisticsMenu() {
-    cout << "Sorted Data: ";
+    cout << "\nSorted Data: ";
     displayArray();
 
     string choice;
-    cout << "\nSelect a statistical calculation:\n1. Find Median.\n2. Find Minimum.\n3. Find Maximum.\n"
-            "4. Find Mean.\n5. Find Summation.\nEnter your choice (1-5):";
+
+    cout << "\n1) Find Median.\n2) Find Minimum\n3) Find Maximum.\n"
+            "4) Find Mean\n5) Find Summation\nPlease, enter your choice: ";
     getline(cin, choice);
 
     while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5") {
-        cout << "Invalid Input!\n";
-        cout << "\nSelect a statistical calculation:\n1. Find Median\n2. Find Minimum\n3. Find Maximum\n"
-                "4. Find Mean\n5. Find Summation\nEnter your choice (1-5):";
+        cout << "Invalid Input, Try again: ";
         getline(cin, choice);
     }
 
@@ -263,8 +264,31 @@ void StatisticalCalculation<T>::statisticsMenu() {
 // ************************** Main Function **************************
 
 int main() {
-    StatisticalCalculation<double> statistics;
-    statistics.inputData();
-    statistics.statisticsMenu();
-    return 0;
+
+    while (true) {
+
+        string choice;  StatisticalCalculation<double> statistics;
+
+        cout << "\n **************************** WELCOME TO OUR STATISTICAL CALCULATION ****************************"<< endl << endl;
+
+        cout << "1) Statistical Calculation" << endl ;
+        cout << "2) Exit " << endl ;
+
+        cout << "\nPlease, enter your choice : "; cin >> choice;
+
+        while ((choice != "1" && choice != "2")) {
+            cout << "Invalid Input!\n";
+            cout << "Please, enter valid choice :"; cin >> choice;
+        }
+
+        if (choice == "1") {
+            statistics.inputData();
+            statistics.statisticsMenu();
+
+        }else {
+            cout << "\n**************** Thanks for using our statistical calculation ****************" << endl << endl;
+            exit(0);
+        }
+
+    }
 }
