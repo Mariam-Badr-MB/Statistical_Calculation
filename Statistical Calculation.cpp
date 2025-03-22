@@ -24,10 +24,11 @@
 
 using namespace std;
 
+
 // **************************  Statistical Calculation Class **************************
 template<typename T>
 class StatisticalCalculation {
-private:
+
     T *data = new T[0];                    // Dynamically allocated array for storing data
     int size;                              // Number of elements in the array
 public:
@@ -51,6 +52,7 @@ public:
     void displayArray();            // Display the sorted array
     void inputData();               // Take input dynamically
     void statisticsMenu();          // Menu for statistical operations
+    void runFromFile();             // For run from file
 };
 
 // ************************** Implement Sort Algorithm  **************************
@@ -245,20 +247,87 @@ void StatisticalCalculation<T>::statisticsMenu() {
 
     string choice;
 
-    cout << "\n1) Find Median.\n2) Find Minimum\n3) Find Maximum.\n"
-            "4) Find Mean\n5) Find Summation\nPlease, enter your choice: ";
-    getline(cin, choice);
-
-    while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5") {
-        cout << "Invalid Input, Try again: ";
+    while (true) {
+        cout << "\n1) Find Median.\n2) Find Minimum\n3) Find Maximum.\n"
+            "4) Find Mean\n5) Find Summation \n0) Exit from Menu\nPlease, enter your choice: ";
         getline(cin, choice);
+
+        while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5" && choice != "0") {
+            cout << "Invalid Input, Try again: ";
+            getline(cin, choice);
+        }
+
+        if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
+        else if (choice == "2") cout << "Min: " << findMin() << endl << endl;
+        else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
+        else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
+        else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
+        else if (choice == "0") return;
+
+    }
+}
+
+// ************************** Read File Function **************************
+
+template<typename T>
+void StatisticalCalculation<T>::runFromFile() {
+    string fileName, line;
+
+    cout << "Please, enter file name: ";
+
+    while (true) {
+        getline(cin, fileName);
+
+        if (fileName.size() < 5 || fileName.substr(fileName.size() - 4) != ".txt") {
+            cout << "\nThe file name should be like this ----> (file name).txt\n";
+            cout << "Please, enter a valid file name: ";
+            continue;
+        }
+
+        // Check if file exists.
+        ifstream file(fileName);
+        if (!file.good()) {
+            cout << "\nError: File does not exist.\n";
+            cout << "Please, enter a valid file name: ";
+            continue;
+        }
+        file.close();
+        break;
     }
 
-    if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
-    else if (choice == "2") cout << "Min: " << findMin() << endl << endl;
-    else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
-    else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
-    else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
+    ifstream file(fileName);
+
+    // Read number of elements
+    cout << "Please, enter the number of elements: ";
+    getline(file, line);
+    cout << line << endl;
+    this->size = stoi(line);  // Convert string to integer
+
+    // Allocate memory for the array
+    this->data = new T[this->size];
+
+    // Read data elements
+    getline(file, line);
+    stringstream ss(line);
+    T num;
+    for (int i = 0; i < this->size; ++i) {
+        ss >> num;
+        this->data[i] = num;  // Store the value in the array
+        cout << "Element number " << (i + 1) << ": " << this->data[i] << endl;
+    }
+
+    // Read operations line
+    getline(file, line);
+    stringstream opStream(line);  // New stringstream for the operations
+    while (opStream >> num) {  // Read each operation code
+        if (num == 1) cout << "Median: " << findMedian() << endl << endl;
+        else if (num == 2) cout << "Min: " << findMin() << endl << endl;
+        else if (num == 3) cout << "Max: " << findMax() << endl << endl;
+        else if (num == 4) cout << "Mean: " << findMean() << endl << endl;
+        else if (num == 5) cout << "Summation: " << findSummation() << endl << endl;
+        else if (num == 0) return;
+    }
+
 }
 
 // ************************** Main Function **************************
@@ -267,24 +336,43 @@ int main() {
 
     while (true) {
 
-        string choice;  StatisticalCalculation<double> statistics;
+        string choice;
+        StatisticalCalculation<double> statistics;
 
         cout << "\n **************************** WELCOME TO OUR STATISTICAL CALCULATION ****************************"<< endl << endl;
 
         cout << "1) Statistical Calculation" << endl ;
         cout << "2) Exit " << endl ;
 
-        cout << "\nPlease, enter your choice : "; cin >> choice;
+        cout << "\nPlease, enter your choice : ";
+        cin >> choice;
 
         while ((choice != "1" && choice != "2")) {
             cout << "Invalid Input!\n";
-            cout << "Please, enter valid choice :"; cin >> choice;
+            cout << "Please, enter valid choice :";
+            cin >> choice;
         }
 
         if (choice == "1") {
-            statistics.inputData();
-            statistics.statisticsMenu();
+            cout << "1) Run From Terminal "<<endl;
+            cout << "2) Run From File "<<endl;
+            cout << "Please , Enter your choice : ";
+            cin >> choice;
 
+            while ((choice != "1" && choice != "2")) {
+                cout << "Invalid Input!\n";
+                cout << "Please , Enter your choice : ";
+                cin >> choice;
+            }
+
+            if (choice == "1") {
+                statistics.inputData();
+                statistics.statisticsMenu();
+            }
+            else if (choice == "2") {
+                cin.ignore();
+                statistics.runFromFile();
+            }
         }else {
             cout << "\n**************** Thanks for using our statistical calculation ****************" << endl << endl;
             exit(0);
