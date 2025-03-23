@@ -31,32 +31,42 @@ class StatisticalCalculation {
 
     T *data = new T[0];                    // Dynamically allocated array for storing data
     int size;                              // Number of elements in the array
+
 public:
     StatisticalCalculation() = default;
-
     ~StatisticalCalculation();
+
+    // setter
+    void setSize(int size);
+    void setData(T *data);
 
     void sort();
 
     // Statistical Calculation Functions
-    T findMedian();
-
+    double findMedian();
     T findMin();
-
     T findMax();
-
     double findMean();
-
     T findSummation();
 
     // Utility Functions
     void displayArray();            // Display the sorted array
     void inputData();               // Take input dynamically
     void statisticsMenu();          // Menu for statistical operations
-    void runFromFile();             // For run from file
+
 };
 
 // ************************** Implement Sort Algorithm  **************************
+template<typename T>
+void StatisticalCalculation<T>::setSize(int size) {
+    this->size = size;
+}
+
+template<typename T>
+void StatisticalCalculation<T>::setData(T *data) {
+    this->data = data;
+}
+
 
 template<class T>
 void merge(T data[], int left, int mid, int right) {
@@ -123,7 +133,7 @@ void StatisticalCalculation<T>::sort() {
 // ************************** Implement Find Median  **************************
 
 template<typename T>
-T StatisticalCalculation<T>::findMedian() {
+double StatisticalCalculation<T>::findMedian() {
     sort();
 
     // If the size of the array is even, return the average of the two middle elements.
@@ -188,54 +198,78 @@ StatisticalCalculation<T>::~StatisticalCalculation() {
 }
 
 // ************************** Implement Input Data **************************
-
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
-    string numOfElements;
+    string numOfElements, type_elements;
     bool notInteger;
 
+    cout << "\n1) Integer \n2) Float \n3) Double\n";
+    cout << "Please, choose the type of your data: ";
+    getline(cin, type_elements);
+
+    // Validate type of data
+    while (true) {
+        if (type_elements == "1" || type_elements == "2" || type_elements == "3") {
+            break; // Valid input
+        } else {
+            cout << "Invalid Input, Try Again: ";
+            getline(cin, type_elements);
+        }
+    }
+
+    // Validate number of elements
     while (true) {
         notInteger = false;
-        cout << "\nPlease, enter the number of elements:";
+        cout << "\nPlease, enter the number of elements: ";
         getline(cin, numOfElements);
+
+        // Check if the input is a positive integer
         if (numOfElements.empty()) {
             notInteger = true;
         } else {
             for (int i = 0; i < numOfElements.size(); ++i) {
-                if (numOfElements[i] < '0' || numOfElements[i] > '9' || numOfElements == " ") {
+                if (numOfElements[i] < '0' || numOfElements[i] > '9') {
                     notInteger = true;
                     break;
                 }
             }
         }
-        if (!notInteger) {
-            if (stoll(numOfElements) > 0) break;
+
+        if (!notInteger && stoll(numOfElements) > 0) {
+            break; // Valid input
         }
         cout << "Invalid Input!\n";
     }
 
+    // Set the size of the data array
     this->size = stoll(numOfElements);
-    auto *newData = new T[this->size];
 
-    for (int i = 1; i <= this->size; ++i) {
+    // Allocate memory for the new data array
+    T* newData = new T[this->size];
+
+    // Input data elements
+    for (int i = 0; i < this->size; ++i) {
         while (true) {
             try {
-                cout << "Please, enter element " << i << ":";
-                cin >> newData[i - 1];
-                if (cin.fail()) throw runtime_error("Invalid Input!");
-                break;
-            }
-            catch (const runtime_error &e) {
+                cout << "Please, enter element " << (i + 1) << ": ";
+                cin >> newData[i];
+                if (cin.fail()) {
+                    throw runtime_error("Invalid Input!");
+                }
+                break; // Valid input
+            } catch (const runtime_error& e) {
                 cout << e.what() << endl;
-                cin.clear();
-                cin.ignore();
+                cin.clear(); // Clear the error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
             }
         }
     }
 
-    // Delete the old data and assign new data.
+    // Delete the old data and assign the new data
     delete[] this->data;
     this->data = newData;
+
+    // Clear the input buffer
     cin.ignore();
 }
 
@@ -257,6 +291,7 @@ void StatisticalCalculation<T>::statisticsMenu() {
             getline(cin, choice);
         }
 
+
         cout << endl;
         if (choice == "1") cout << "The Value of Median is:" << findMedian() << endl << endl;
         else if (choice == "2") cout << "The Value of min is:" << findMin() << endl << endl;
@@ -269,9 +304,10 @@ void StatisticalCalculation<T>::statisticsMenu() {
 
 // ************************** Read File Function **************************
 
-template<typename T>
-void StatisticalCalculation<T>::runFromFile() {
-    string fileName, line;
+
+
+void runFromFile() {
+    string fileName, line, type_elements;
     cout << "Please, enter file name:";
 
     while (true) {
@@ -286,7 +322,7 @@ void StatisticalCalculation<T>::runFromFile() {
         // Check if file exists.
         ifstream file(fileName);
         if (!file.good()) {
-            cout << "\nError in open the file, Check your File\n";
+            cout << "\nError in opening the file, Check your File\n";
             cout << "Please, enter a valid file name:";
             continue;
         }
@@ -296,38 +332,116 @@ void StatisticalCalculation<T>::runFromFile() {
 
     ifstream file(fileName);
 
-    // Read number of elements
-    cout << "\nPlease, enter the number of elements:";
-    getline(file, line);
-    cout << line << endl;
-    this->size = stoi(line);  // Convert string to integer
+    while (true) {
+        // Read Type of Data
+        cout << "\n1) Integer \n2) Float \n3) Double \n";
+        cout << "Please, enter type of your data: ";
+        getline(file, type_elements);
+        cout << type_elements << endl;
 
-    // Allocate memory for the array
-    this->data = new T[this->size];
+        // Read number of elements
+        getline(file, line);
+        cout << "\nPlease, enter the number of elements: ";
+        cout << line << endl;
+        int size = stoi(line);
 
-    // Read data elements
-    getline(file, line);
-    stringstream ss(line);
-    T num;
-    for (int i = 0; i < this->size; ++i) {
-        ss >> num;
-        this->data[i] = num;  // Store the value in the array
-        cout << "Please, element number " << (i + 1) << ": " << this->data[i] << endl;
-    }
+        if (type_elements == "1") {
+            StatisticalCalculation<int> stat;
+            stat.setSize(size);
+            int* data = new int[size];
 
-    // Read operations line
-    getline(file, line);
-    stringstream opStream(line);  // New stringstream for the operations
+            // Read data elements
+            getline(file, line);
+            stringstream ss(line);
+            for (int i = 0; i < size; ++i) {
+                ss >> data[i];
+                cout << "Please, element number " << (i + 1) << " : " << data[i] << endl;
+            }
 
-    while (opStream >> num) {  // Read each operation code
-        if (num == 1) cout << "The Value of Median is:" << findMedian() << endl << endl;
-        else if (num == 2) cout << "The Value of min is:" << findMin() << endl << endl;
-        else if (num == 3) cout << "The Value of Max is:" << findMax() << endl << endl;
-        else if (num == 4) cout << "The Value of Mean is:" << findMean() << endl << endl;
-        else if (num == 5) cout << "The Value of Summation is:" << findSummation() << endl << endl;
-        else if (num == 0) return;
+            stat.setData(data);
+            cout << endl ;
+
+            // Read operations line
+            getline(file, line);
+            stringstream opStream(line);
+            int num;
+            while (opStream >> num) {
+                if (num == 1) cout << "The Value of Median is: " << stat.findMedian() << endl ;
+                else if (num == 2) cout << "The Value of Min is: " << stat.findMin() << endl ;
+                else if (num == 3) cout << "The Value of Max is: " << stat.findMax() << endl ;
+                else if (num == 4) cout << "The Value of Mean is: " << stat.findMean() << endl ;
+                else if (num == 5) cout << "The Value of Summation is: " << stat.findSummation() << endl ;
+                else if (num == 0) {
+                    cout << endl << endl;
+                    return;
+                }
+            }
+
+        } else if (type_elements == "2") {
+            StatisticalCalculation<float> stat;
+            stat.setSize(size);
+            float* data = new float[size];
+
+            // Read data elements
+            getline(file, line);
+            stringstream ss(line);
+            for (int i = 0; i < size; ++i) {
+                ss >> data[i];
+                cout << "Please, element number " << (i + 1) << " : " << data[i] << endl;
+            }
+            stat.setData(data);
+            cout << endl ;
+
+            // Read operations line
+            getline(file, line);
+            stringstream opStream(line);
+            int num;
+            while (opStream >> num) {
+                if (num == 1) cout << "The Value of Median is: " << stat.findMedian() << endl ;
+                else if (num == 2) cout << "The Value of Min is: " << stat.findMin() << endl ;
+                else if (num == 3) cout << "The Value of Max is: " << stat.findMax() << endl ;
+                else if (num == 4) cout << "The Value of Mean is: " << stat.findMean() << endl ;
+                else if (num == 5) cout << "The Value of Summation is: " << stat.findSummation() << endl ;
+                else if (num == 0) {
+                    cout << endl << endl;
+                    return;
+                }
+            }
+
+        } else if (type_elements == "3") {
+            StatisticalCalculation<double> stat;
+            stat.setSize(size);
+            double* data = new double[size];
+
+            // Read data elements
+            getline(file, line);
+            stringstream ss(line);
+            for (int i = 0; i < size; ++i) {
+                ss >> data[i];
+                cout << "Please, element number " << (i + 1) << " : " << data[i] << endl;
+            }
+            stat.setData(data);
+            cout << endl ;
+
+            // Read operations line
+            getline(file, line);
+            stringstream opStream(line);
+            int num;
+            while (opStream >> num) {
+                if (num == 1) cout << "The Value of Median is: " << stat.findMedian() << endl ;
+                else if (num == 2) cout << "The Value of Min is: " << stat.findMin() << endl ;
+                else if (num == 3) cout << "The Value of Max is: " << stat.findMax() << endl ;
+                else if (num == 4) cout << "The Value of Mean is: " << stat.findMean() << endl ;
+                else if (num == 5) cout << "The Value of Summation is: " << stat.findSummation() << endl ;
+                else if (num == 0) {
+                    cout << endl << endl;
+                    return;
+                }
+            }
+        }
     }
 }
+
 
 // ************************** Main Function **************************
 
@@ -352,9 +466,9 @@ int main() {
 
         if (choice == "1") {
             while (true) {
-                cout << "\n1) Run From Terminal." << endl;
-                cout << "2) Run From File." << endl;
-                cout << "3) Exit." << endl;
+                cout << "\n1) Run From Terminal" << endl;
+                cout << "2) Run From File" << endl;
+                cout << "3) Exit" << endl;
                 cout << "Please, enter your choice:";
                 getline(cin, choice);
 
@@ -366,11 +480,11 @@ int main() {
                 statistics.inputData();
                 statistics.statisticsMenu();
             } else if (choice == "2") {
-                statistics.runFromFile();
-            }else continue;
+                runFromFile();
+            }
         }
     }
 
-    cout << "\n**************** Thanks for using our Statistical Calculation ****************" << endl << endl;
+    cout << "\n\n**************** Thanks for using our Statistical Calculation ****************" << endl << endl;
     exit(0);
 }
