@@ -16,7 +16,7 @@
     It also includes utility functions for displaying the sorted data, taking user input dynamically,
     and providing a menu for statistical operations.
 
-* Version: V5.0
+* Version: V1.2
 */
 // ********************************************************************************************************
 
@@ -248,7 +248,7 @@ void StatisticalCalculation<T>::statisticsMenu() {
     string choice;
 
     while (true) {
-        cout << "\n1) Find Median.\n2) Find Minimum\n3) Find Maximum.\n"
+        cout << "\n1) Find Median \n2) Find Minimum\n3) Find Maximum \n"
             "4) Find Mean\n5) Find Summation \n0) Exit from Menu\nPlease, enter your choice: ";
         getline(cin, choice);
 
@@ -257,11 +257,11 @@ void StatisticalCalculation<T>::statisticsMenu() {
             getline(cin, choice);
         }
 
-        if (choice == "1") cout << "Median: " << findMedian() << endl << endl;
-        else if (choice == "2") cout << "Min: " << findMin() << endl << endl;
-        else if (choice == "3") cout << "Max: " << findMax() << endl << endl;
-        else if (choice == "4") cout << "Mean: " << findMean() << endl << endl;
-        else if (choice == "5") cout << "Summation: " << findSummation() << endl << endl;
+        if (choice == "1") cout << "The Value of Median is : " << findMedian() << endl << endl;
+        else if (choice == "2") cout << "The Value of min is : "<< findMin() << endl << endl;
+        else if (choice == "3") cout << "The Value of Max is  : " << findMax() << endl << endl;
+        else if (choice == "4") cout << "The Value of Mean is: " << findMean() << endl << endl;
+        else if (choice == "5") cout << "The Value of Summation is : " << findSummation() << endl << endl;
         else if (choice == "0") return;
 
     }
@@ -287,7 +287,7 @@ void StatisticalCalculation<T>::runFromFile() {
         // Check if file exists.
         ifstream file(fileName);
         if (!file.good()) {
-            cout << "\nError: File does not exist.\n";
+            cout << "\nError in open the file, Check your File\n";
             cout << "Please, enter a valid file name: ";
             continue;
         }
@@ -313,18 +313,19 @@ void StatisticalCalculation<T>::runFromFile() {
     for (int i = 0; i < this->size; ++i) {
         ss >> num;
         this->data[i] = num;  // Store the value in the array
-        cout << "Element number " << (i + 1) << ": " << this->data[i] << endl;
+        cout << "Please, element number " << (i + 1) << ": " << this->data[i] << endl;
     }
 
     // Read operations line
     getline(file, line);
     stringstream opStream(line);  // New stringstream for the operations
+
     while (opStream >> num) {  // Read each operation code
-        if (num == 1) cout << "Median: " << findMedian() << endl << endl;
-        else if (num == 2) cout << "Min: " << findMin() << endl << endl;
-        else if (num == 3) cout << "Max: " << findMax() << endl << endl;
-        else if (num == 4) cout << "Mean: " << findMean() << endl << endl;
-        else if (num == 5) cout << "Summation: " << findSummation() << endl << endl;
+        if (num == 1) cout << "The Value of Median is : " << findMedian() << endl << endl;
+        else if (num == 2) cout << "The Value of min is : " << findMin() << endl << endl;
+        else if (num == 3) cout << "The Value of Max is  : " << findMax() << endl << endl;
+        else if (num == 4) cout << "The Value of Mean is: " << findMean() << endl << endl;
+        else if (num == 5) cout << "The Value of Summation is : " << findSummation() << endl << endl;
         else if (num == 0) return;
     }
 
@@ -356,12 +357,12 @@ int main() {
         if (choice == "1") {
             cout << "1) Run From Terminal "<<endl;
             cout << "2) Run From File "<<endl;
-            cout << "Please , Enter your choice : ";
+            cout << "Please, enter your choice : ";
             cin >> choice;
 
             while ((choice != "1" && choice != "2")) {
                 cout << "Invalid Input!\n";
-                cout << "Please , Enter your choice : ";
+                cout << "Please, enter your choice : ";
                 cin >> choice;
             }
 
@@ -374,7 +375,7 @@ int main() {
                 statistics.runFromFile();
             }
         }else {
-            cout << "\n**************** Thanks for using our statistical calculation ****************" << endl << endl;
+            cout << "\n**************** Thanks for using our Statistical Calculation ****************" << endl << endl;
             exit(0);
         }
 
