@@ -23,14 +23,17 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+bool is_Int(const string &str);
+bool is_num(const string &str);
 
+string type_elements = "";
 
 // **************************  Statistical Calculation Class **************************
 template<typename T>
 class StatisticalCalculation {
 
     T *data = new T[0];                    // Dynamically allocated array for storing data
-    int size;                              // Number of elements in the array
+    int size{};                              // Number of elements in the array
 
 public:
     StatisticalCalculation() = default;
@@ -57,6 +60,7 @@ public:
 };
 
 // ************************** Implement Sort Algorithm  **************************
+
 template<typename T>
 void StatisticalCalculation<T>::setSize(int size) {
     this->size = size;
@@ -200,77 +204,44 @@ StatisticalCalculation<T>::~StatisticalCalculation() {
 // ************************** Implement Input Data **************************
 template<typename T>
 void StatisticalCalculation<T>::inputData() {
-    string numOfElements, type_elements;
-    bool notInteger;
 
-    cout << "\n1) Integer \n2) Float \n3) Double\n";
-    cout << "Please, choose the type of your data: ";
-    getline(cin, type_elements);
+    string numOfElements,  element ;
 
-    // Validate type of data
-    while (true) {
-        if (type_elements == "1" || type_elements == "2" || type_elements == "3") {
-            break; // Valid input
-        } else {
-            cout << "Invalid Input, Try Again: ";
-            getline(cin, type_elements);
-        }
-    }
-
-    // Validate number of elements
-    while (true) {
-        notInteger = false;
+        // Validate number of element
         cout << "\nPlease, enter the number of elements: ";
         getline(cin, numOfElements);
 
-        // Check if the input is a positive integer
-        if (numOfElements.empty()) {
-            notInteger = true;
-        } else {
-            for (int i = 0; i < numOfElements.size(); ++i) {
-                if (numOfElements[i] < '0' || numOfElements[i] > '9') {
-                    notInteger = true;
-                    break;
-                }
-            }
+        while (cin.fail() || !is_Int(numOfElements)) {
+            cout << "Invalid Input, Try Again : ";
+            getline(cin, numOfElements);
         }
 
-        if (!notInteger && stoll(numOfElements) > 0) {
-            break; // Valid input
-        }
-        cout << "Invalid Input!\n";
-    }
 
     // Set the size of the data array
-    this->size = stoll(numOfElements);
+    this->size = stoi(numOfElements);
 
     // Allocate memory for the new data array
     T* newData = new T[this->size];
 
     // Input data elements
     for (int i = 0; i < this->size; ++i) {
-        while (true) {
-            try {
-                cout << "Please, enter element " << (i + 1) << ": ";
-                cin >> newData[i];
-                if (cin.fail()) {
-                    throw runtime_error("Invalid Input!");
-                }
-                break; // Valid input
-            } catch (const runtime_error& e) {
-                cout << e.what() << endl;
-                cin.clear(); // Clear the error flag
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+
+            cout << "Please, enter element " << (i + 1) << ": ";
+            getline(cin, element);
+
+            while (cin.fail() || !is_num(element)) {
+                cout << "Invalid Input, Try Again : ";
+                getline(cin, element);
             }
+
+            if (type_elements == "1")newData[i] = stoi(element);
+            else if (type_elements == "2")newData[i] = stof(element);
+            else if (type_elements == "3")newData[i] = stod(element);
         }
-    }
 
-    // Delete the old data and assign the new data
-    delete[] this->data;
-    this->data = newData;
-
-    // Clear the input buffer
-    cin.ignore();
+        // Delete the old data and assign the new data
+        delete[] this->data;
+        this->data = newData;
 }
 
 // ************************** Implement Statistics Menu **************************
@@ -303,8 +274,6 @@ void StatisticalCalculation<T>::statisticsMenu() {
 }
 
 // ************************** Read File Function **************************
-
-
 
 void runFromFile() {
     string fileName, line, type_elements;
@@ -442,24 +411,57 @@ void runFromFile() {
     }
 }
 
+// ************************** Read Terminal Function **************************
+void runFromTerminal() {
+
+    cout << "\n1) Integer \n2) Float \n3) Double\n";
+    cout << "\nPlease, choose the type of your data: ";
+    getline(cin, type_elements);
+
+    // Validate type of data
+    while (true) {
+        if (type_elements == "1" || type_elements == "2" || type_elements == "3") {
+            break; // Valid input
+        } else {
+            cout << "Invalid Input, Try Again : ";
+            getline(cin, type_elements);
+        }
+    }
+    if (type_elements == "1") {
+        StatisticalCalculation<int> stat;
+        stat.inputData();
+        stat.statisticsMenu();
+
+    }else if (type_elements == "2") {
+        StatisticalCalculation<float> stat;
+        stat.inputData();
+        stat.statisticsMenu();
+
+    }else if (type_elements == "3") {
+        StatisticalCalculation<double> stat;
+        stat.inputData();
+        stat.statisticsMenu();
+    }
+}
 
 // ************************** Main Function **************************
 
 int main() {
     while (true) {
         string choice;
-        StatisticalCalculation<double> statistics;
+        cout << "\n******************* WELCOME TO OUR STATISTICAL CALCULATION *******************" << endl << endl;
 
-        while (true) {
-            cout << "\n******************* WELCOME TO OUR STATISTICAL CALCULATION *******************" << endl << endl;
             cout << "1) Statistical Calculation" << endl;
-            cout << "2) Exit " << endl;
-            cout << "Please, enter your choice:";
+            cout << "2) Exit \n" << endl;
+            cout << "Please, enter your choice : ";
             getline(cin, choice);
 
-            if (choice == "1" || choice == "2") break;
-            cout << "Invalid choice. Please, Try again." << endl << endl;
-        }
+            while (choice != "1" && choice != "2") {
+                cout << "Invalid choice. Please, Try again : " ;
+                getline(cin, choice);
+            }
+
+
 
         // Exit the system.
         if (choice == "2") break;
@@ -468,7 +470,7 @@ int main() {
             while (true) {
                 cout << "\n1) Run From Terminal" << endl;
                 cout << "2) Run From File" << endl;
-                cout << "3) Exit" << endl;
+                cout << "3) Exit \n" << endl;
                 cout << "Please, enter your choice:";
                 getline(cin, choice);
 
@@ -477,8 +479,7 @@ int main() {
             }
 
             if (choice == "1") {
-                statistics.inputData();
-                statistics.statisticsMenu();
+                runFromTerminal();
             } else if (choice == "2") {
                 runFromFile();
             }
@@ -487,4 +488,13 @@ int main() {
 
     cout << "\n\n**************** Thanks for using our Statistical Calculation ****************" << endl << endl;
     exit(0);
+}
+
+bool is_Int(const string &str) {
+    static const regex integerPattern(R"(^-?\d+$)");
+    return regex_match(str, integerPattern);
+}
+bool is_num(const string &str) {
+    static const regex numberPattern(R"(^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$)");
+    return regex_match(str, numberPattern);
 }
